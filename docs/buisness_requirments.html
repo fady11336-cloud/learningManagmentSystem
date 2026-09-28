@@ -1,0 +1,1422 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LMS — BRD &amp; PRD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ── reset & vars ── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #0d1c2c;
+      --ink-soft: #2d4055;
+      --paper: #f3f1ed;
+      --paper-raised: #ffffff;
+      --line: #ddd8ce;
+      --teal: #1e6b5e;
+      --teal-soft: #e2eee9;
+      --stamp: #b13a3a;
+      --amber: #a67c3e;
+      --sidebar-w: 290px;
+      --radius: 12px;
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: "Fraunces", serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    ::selection {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    /* ── layout ── */
+    .shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--ink);
+      color: #d0dbe6;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 32px 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .brand {
+      font-family: "Fraunces", serif;
+      font-size: 1.3rem;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 2px;
+    }
+
+    .brand-sub {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7f95a8;
+      margin-bottom: 28px;
+      opacity: 0.8;
+    }
+
+    .doc-toggle {
+      display: flex;
+      background: #1f3142;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+
+    .doc-toggle button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: #b2c4d3;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 8px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .doc-toggle button.active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(30, 107, 94, 0.25);
+    }
+
+    .toc {
+      flex: 1;
+      overflow-y: auto;
+      margin: 0 -6px;
+      padding: 0 6px;
+    }
+
+    .toc-group {
+      margin-bottom: 22px;
+    }
+
+    .toc-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #60778b;
+      margin: 0 0 10px 4px;
+      font-weight: 500;
+    }
+
+    .toc a {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      color: #cbd7e2;
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 7px 10px;
+      border-radius: 8px;
+      transition: 0.15s ease;
+      font-weight: 450;
+    }
+
+    .toc a:hover {
+      background: #1f3142;
+      color: #fff;
+    }
+
+    .toc a.active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(30, 107, 94, 0.2);
+    }
+
+    .toc a .num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: #7e99ae;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .toc a.active .num {
+      color: #d4eee7;
+      opacity: 1;
+    }
+
+    .sidebar-foot {
+      border-top: 1px solid #283b4d;
+      padding-top: 18px;
+      margin-top: 12px;
+    }
+
+    .print-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #3d5569;
+      color: #c0d0dd;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .print-btn:hover {
+      border-color: var(--teal);
+      color: #fff;
+      background: rgba(30, 107, 94, 0.08);
+    }
+
+    /* ── main ── */
+    main {
+      flex: 1;
+      max-width: 940px;
+      padding: 56px 64px 120px;
+      margin: 0 auto;
+    }
+
+    .doc-pane {
+      display: none;
+    }
+
+    .doc-pane.active {
+      display: block;
+    }
+
+    /* ── cover ── */
+    .cover {
+      position: relative;
+      border: 1px solid var(--line);
+      background: var(--paper-raised);
+      padding: 44px 48px;
+      margin-bottom: 56px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+
+    .cover-eyebrow {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .cover h1 {
+      font-size: 2.4rem;
+      line-height: 1.05;
+      margin: 0 0 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .cover .tagline {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 56ch;
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 32px;
+      right: 40px;
+      border: 2.5px solid var(--stamp);
+      color: var(--stamp);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      padding: 6px 16px;
+      border-radius: 6px;
+      transform: rotate(5deg);
+      opacity: 0.9;
+      background: rgba(177, 58, 58, 0.03);
+    }
+
+    .doc-info {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 12px;
+    }
+
+    .doc-info td {
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .doc-info td:first-child {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--ink-soft);
+      width: 180px;
+      letter-spacing: 0.02em;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ── sections ── */
+    section.block {
+      margin-bottom: 52px;
+      scroll-margin-top: 32px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.4rem;
+      color: var(--teal);
+      font-weight: 500;
+      opacity: 0.8;
+    }
+
+    .section-head h2 {
+      font-size: 1.6rem;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    section.block p {
+      color: var(--ink-soft);
+      margin: 0 0 14px;
+      max-width: 70ch;
+    }
+
+    section.block ul,
+    section.block ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+      color: var(--ink-soft);
+    }
+
+    section.block li {
+      margin-bottom: 6px;
+    }
+
+    .callout {
+      background: var(--teal-soft);
+      border-left: 4px solid var(--teal);
+      padding: 18px 24px;
+      border-radius: 0 8px 8px 0;
+      color: var(--ink);
+      font-size: 0.95rem;
+      margin: 20px 0;
+      box-shadow: var(--shadow-card);
+    }
+
+    .callout strong {
+      color: var(--teal);
+    }
+
+    table.spec {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.88rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    table.spec th,
+    table.spec td {
+      text-align: left;
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+    }
+
+    table.spec th {
+      background: #ece8e0;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .persona-card {
+      background: var(--paper-raised);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-card);
+      transition: 0.15s ease;
+    }
+
+    .persona-card:hover {
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05);
+    }
+
+    .persona-card h4 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .persona-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.6rem;
+      background: var(--teal-soft);
+      color: var(--teal);
+      padding: 2px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      font-weight: 500;
+    }
+
+    .persona-card h5 {
+      margin: 14px 0 6px;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    .persona-card ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.85rem;
+    }
+
+    .journey {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      align-items: center;
+      margin: 20px 0 28px;
+      background: var(--paper-raised);
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-card);
+    }
+
+    .journey-step {
+      background: var(--paper);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-family: "JetBrains Mono", monospace;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      margin: 4px 0;
+    }
+
+    .journey-arrow {
+      color: var(--teal);
+      padding: 0 8px;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    /* ── modules (accordion) ── */
+    .module {
+      border: 1px solid var(--line);
+      background: var(--paper-raised);
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: 0.2s ease;
+    }
+
+    .module:hover {
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+    }
+
+    .module-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      cursor: pointer;
+      user-select: none;
+      transition: 0.15s ease;
+    }
+
+    .module-head:hover {
+      background: rgba(30, 107, 94, 0.02);
+    }
+
+    .module-head h3 {
+      font-size: 1.05rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+
+    .module-head .mod-index {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--teal);
+      font-size: 0.8rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+
+    .chevron {
+      width: 10px;
+      height: 10px;
+      border-right: 2.5px solid var(--ink-soft);
+      border-bottom: 2.5px solid var(--ink-soft);
+      transform: rotate(45deg);
+      transition: 0.25s ease;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .module.open .chevron {
+      transform: rotate(-135deg);
+      opacity: 0.9;
+    }
+
+    .module-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 22px;
+    }
+
+    .module.open .module-body {
+      max-height: 800px;
+      padding: 0 22px 22px;
+    }
+
+    .module-body h5 {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin: 18px 0 8px;
+      font-weight: 500;
+    }
+
+    .module-body h5:first-child {
+      margin-top: 4px;
+    }
+
+    .module-body p {
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+    }
+
+    .module-body ul {
+      color: var(--ink-soft);
+      padding-left: 22px;
+      margin-bottom: 10px;
+    }
+
+    .module-body ul li {
+      margin-bottom: 4px;
+    }
+
+    /* ── constraints / chips ── */
+    .constraints-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 18px 0 24px;
+    }
+
+    .chip {
+      background: var(--paper-raised);
+      border: 1px solid var(--line);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 0.78rem;
+      font-family: "JetBrains Mono", monospace;
+      text-align: center;
+      color: var(--ink);
+      box-shadow: var(--shadow-card);
+      transition: 0.1s ease;
+    }
+
+    .chip:hover {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+    }
+
+    /* ── edge cases ── */
+    .edge-case {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--line);
+      font-size: 0.9rem;
+      align-items: center;
+    }
+
+    .edge-case:last-child {
+      border-bottom: none;
+    }
+
+    .edge-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.6rem;
+      background: #fae8e8;
+      color: var(--stamp);
+      padding: 3px 12px;
+      border-radius: 30px;
+      height: fit-content;
+      white-space: nowrap;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── footer ── */
+    footer.pagefoot {
+      display: flex;
+      justify-content: space-between;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.65rem;
+      color: #9babb5;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      margin-top: 44px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── responsive ── */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        padding: 32px 20px 80px;
+        max-width: 100%;
+      }
+
+      .persona-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cover {
+        padding: 28px 24px;
+      }
+
+      .stamp {
+        position: relative;
+        top: 0;
+        right: 0;
+        transform: none;
+        margin-bottom: 16px;
+        display: inline-block;
+      }
+
+      .cover h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media print {
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      .doc-pane {
+        display: block !important;
+      }
+
+      .module-body {
+        max-height: none !important;
+        padding: 0 22px 22px !important;
+      }
+
+      .module {
+        break-inside: avoid;
+      }
+
+      .cover {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+
+      .stamp {
+        position: absolute;
+        transform: rotate(5deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">Learning Management</div>
+      <div class="brand-sub">Delegate Program · Case Study</div>
+
+      <div class="doc-toggle">
+        <button id="btn-brd" class="active" onclick="showDoc('brd')">
+          BRD
+        </button>
+        <button id="btn-prd" onclick="showDoc('prd')">PRD</button>
+      </div>
+
+      <nav class="toc" id="toc-brd">
+        <div class="toc-group">
+          <div class="toc-label">Business Requirements</div>
+          <a href="#brd-1" class="toc-link"><span class="num">01</span>Executive Summary</a>
+          <a href="#brd-2" class="toc-link"><span class="num">02</span>Business Problem</a>
+          <a href="#brd-3" class="toc-link"><span class="num">03</span>Business Goals</a>
+          <a href="#brd-4" class="toc-link"><span class="num">04</span>Success Metrics</a>
+          <a href="#brd-5" class="toc-link"><span class="num">05</span>Stakeholders</a>
+          <a href="#brd-6" class="toc-link"><span class="num">06</span>Constraints &amp; Timeline</a>
+        </div>
+      </nav>
+
+      <nav class="toc" id="toc-prd" style="display: none">
+        <div class="toc-group">
+          <div class="toc-label">Product Requirements</div>
+          <a href="#prd-1" class="toc-link"><span class="num">01</span>Document Info</a>
+          <a href="#prd-2" class="toc-link"><span class="num">02</span>User Personas</a>
+          <a href="#prd-3" class="toc-link"><span class="num">03</span>Scope</a>
+          <a href="#prd-4" class="toc-link"><span class="num">04</span>Assumptions</a>
+          <a href="#prd-5" class="toc-link"><span class="num">05</span>User Journey</a>
+          <a href="#prd-6" class="toc-link"><span class="num">06</span>Functional Requirements</a>
+          <a href="#prd-7" class="toc-link"><span class="num">07</span>Non-Functional Reqs</a>
+          <a href="#prd-8" class="toc-link"><span class="num">08</span>Edge Cases</a>
+          <a href="#prd-9" class="toc-link"><span class="num">09</span>Deliverables</a>
+          <a href="#prd-10" class="toc-link"><span class="num">10</span>Evaluation Criteria</a>
+        </div>
+      </nav>
+
+      <div class="sidebar-foot">
+        <button class="print-btn" onclick="window.print()">
+          <span>↓</span> Export / Print PDF
+        </button>
+      </div>
+    </aside>
+
+    <main>
+      <!-- ============ BRD ============ -->
+      <div class="doc-pane active" id="pane-brd">
+        <div class="cover">
+          <div class="stamp">DRAFT v1.0</div>
+          <div class="cover-eyebrow">Business Requirements Document</div>
+          <h1>Learning Management System</h1>
+          <p class="tagline">
+            A modern LMS backend built as a delegate case study — instructors
+            manage courses, students learn and get assessed, all behind a
+            Laravel REST API.
+          </p>
+          <table class="doc-info">
+            <tr>
+              <td>Product name</td>
+              <td>Learning Management System</td>
+            </tr>
+            <tr>
+              <td>Version</td>
+              <td>1.0</td>
+            </tr>
+            <tr>
+              <td>Prepared for</td>
+              <td>Delegate Team</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>Draft · Team Kickoff</td>
+            </tr>
+            <tr>
+              <td>Related</td>
+              <td>PRD (toggle above)</td>
+            </tr>
+          </table>
+        </div>
+
+        <section class="block" id="brd-1">
+          <div class="section-head"><span class="section-num">01</span>
+            <h2>Executive Summary</h2>
+          </div>
+          <p>
+            The LMS is an online Learning Management System designed to give
+            instructors full control over course creation and student
+            management. Students enroll, work through lessons, submit
+            assignments, take quizzes, and track their progress — all exposed
+            through a clean Laravel API.
+            <b></b>
+            no video, no SCORM/xAPI
+            in this phase; the focus is on domain modeling, business logic,
+            and a production-ready backend.
+          </p>
+        </section>
+
+        <section class="block" id="brd-2">
+          <div class="section-head"><span class="section-num">02</span>
+            <h2>Business Problem</h2>
+          </div>
+          <p>
+            Educational platforms built without a solid backend architecture
+            often fail in predictable ways:
+          </p>
+          <ul>
+            <li>Course content and enrollments scattered across ad‑hoc tables</li>
+            <li>Progress tracking that's incomplete or unreliable</li>
+            <li>Assignments and quizzes treated as afterthoughts</li>
+            <li>No consistent way to report on completion or performance</li>
+            <li>Fragile handling of real‑world edge cases</li>
+          </ul>
+          <p>
+            This case study gives the delegate team a realistic domain to
+            solve — not a toy CRUD app, but a platform with genuine business
+            rules, ordering, and nuance.
+          </p>
+        </section>
+
+        <section class="block" id="brd-3">
+          <div class="section-head"><span class="section-num">03</span>
+            <h2>Business Goals</h2>
+          </div>
+          <ul>
+            <li>Deliver a well‑architected backend that models a real LMS</li>
+            <li>Give every team member end‑to‑end ownership of at least one module</li>
+            <li>Practice translating a PRD into a Laravel API, not just writing code</li>
+            <li>Build something portfolio‑worthy — with API docs, ERD, and tests</li>
+          </ul>
+        </section>
+
+        <section class="block" id="brd-4">
+          <div class="section-head"><span class="section-num">04</span>
+            <h2>Success Metrics</h2>
+          </div>
+          <ul>
+            <li>A student can register, verify, enroll, and complete a course end‑to‑end</li>
+            <li>Assignment and quiz submissions are never lost or double‑counted</li>
+            <li>Core endpoints respond within acceptable targets under load</li>
+            <li>The full happy path works reliably in staging</li>
+          </ul>
+        </section>
+
+        <section class="block" id="brd-5">
+          <div class="section-head"><span class="section-num">05</span>
+            <h2>Stakeholders</h2>
+          </div>
+          <table class="spec">
+            <tr>
+              <th>Stakeholder</th>
+              <th>Responsibility</th>
+            </tr>
+            <tr>
+              <td>Product owner</td>
+              <td>Defines requirements, approves scope</td>
+            </tr>
+            <tr>
+              <td>Admin</td>
+              <td>Platform‑wide oversight</td>
+            </tr>
+            <tr>
+              <td>Instructor</td>
+              <td>Creates and manages courses, lessons, assignments, quizzes</td>
+            </tr>
+            <tr>
+              <td>Student</td>
+              <td>Enrolls, learns, submits work, tracks progress</td>
+            </tr>
+            <tr>
+              <td>Backend team</td>
+              <td>Designs and implements the API, owns modules</td>
+            </tr>
+          </table>
+        </section>
+
+        <section class="block" id="brd-6">
+          <div class="section-head"><span class="section-num">06</span>
+            <h2>Constraints &amp; Timeline</h2>
+          </div>
+          <div class="constraints-grid">
+            <div class="chip">Laravel API</div>
+            <div class="chip">RESTful</div>
+            <div class="chip">MySQL</div>
+            <div class="chip">Git workflow</div>
+            <div class="chip">No SCORM/xAPI</div>
+          </div>
+          <div class="callout">
+            <strong>Timeline:</strong> 14 days end‑to‑end, from kickoff to final review.
+            SCORM/xAPI support is explicitly deferred.
+          </div>
+        </section>
+
+        <footer class="pagefoot"><span>LMS / BRD / v1.0</span><span>Business Requirements</span></footer>
+      </div>
+
+      <!-- ============ PRD ============ -->
+      <div class="doc-pane" id="pane-prd">
+        <div class="cover">
+          <div class="stamp">DRAFT v1.0</div>
+          <div class="cover-eyebrow">Product Requirements Document</div>
+          <h1>LMS Backend</h1>
+          <p class="tagline">
+            Functional and non‑functional requirements for the Laravel REST API
+            powering the LMS case study.
+          </p>
+          <table class="doc-info" id="prd-1">
+            <tr>
+              <td>Product name</td>
+              <td>Learning Management System</td>
+            </tr>
+            <tr>
+              <td>Version</td>
+              <td>1.0</td>
+            </tr>
+            <tr>
+              <td>Company</td>
+              <td>Delegate Program</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>Draft · Team Kickoff</td>
+            </tr>
+          </table>
+        </div>
+
+        <section class="block" id="prd-2">
+          <div class="section-head"><span class="section-num">02</span>
+            <h2>User Personas</h2>
+          </div>
+          <div class="persona-grid">
+            <div class="persona-card">
+              <h4>Student <span class="persona-tag">learner</span></h4>
+              <h5>Goals</h5>
+              <ul>
+                <li>Learn at their own pace</li>
+                <li>Track progress across courses</li>
+                <li>Get fast feedback on quizzes</li>
+              </ul>
+              <h5>Pain points</h5>
+              <ul>
+                <li>Confusing navigation</li>
+                <li>Missed deadlines with no warning</li>
+                <li>Progress that resets</li>
+              </ul>
+            </div>
+            <div class="persona-card">
+              <h4>Instructor <span class="persona-tag">creator</span></h4>
+              <h5>Goals</h5>
+              <ul>
+                <li>Build courses quickly</li>
+                <li>Grade assignments with ease</li>
+                <li>See student progress</li>
+              </ul>
+              <h5>Pain points</h5>
+              <ul>
+                <li>No visibility into who's stuck</li>
+                <li>Editing published content is risky</li>
+                <li>Grading is manual and easy to lose</li>
+              </ul>
+            </div>
+            <div class="persona-card">
+              <h4>Admin <span class="persona-tag">operator</span></h4>
+              <h5>Goals</h5>
+              <ul>
+                <li>Oversee the platform at a glance</li>
+                <li>Manage users and roles</li>
+                <li>Trust reporting</li>
+              </ul>
+              <h5>Pain points</h5>
+              <ul>
+                <li>No single source of truth</li>
+                <li>Inconsistent audit trail</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="block" id="prd-3">
+          <div class="section-head"><span class="section-num">03</span>
+            <h2>Scope</h2>
+          </div>
+          <table class="spec">
+            <tr>
+              <th>In scope</th>
+              <th>Out of scope</th>
+            </tr>
+            <tr>
+              <td>Authentication &amp; authorization</td>
+              <td>Video conferencing</td>
+            </tr>
+            <tr>
+              <td>Course management</td>
+              <td>SCORM / xAPI</td>
+            </tr>
+            <tr>
+              <td>Lessons</td>
+              <td>Live streaming</td>
+            </tr>
+            <tr>
+              <td>Assignments</td>
+              <td>Mobile apps</td>
+            </tr>
+            <tr>
+              <td>Quizzes</td>
+              <td>AI tutor</td>
+            </tr>
+            <tr>
+              <td>Progress tracking</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Email notifications</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Reporting</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Payment processing</td>
+              <td>—</td>
+            </tr>
+          </table>
+        </section>
+
+        <section class="block" id="prd-4">
+          <div class="section-head"><span class="section-num">04</span>
+            <h2>Assumptions</h2>
+          </div>
+          <ul>
+            <li>All users have reliable internet access</li>
+            <li>Email verification is available as a dependency</li>
+            <li>Course videos are hosted externally</li>
+            <li>A student may enroll in many courses; a course holds many students</li>
+            <li>SCORM/xAPI is deferred — no compatibility work in this phase</li>
+          </ul>
+        </section>
+
+        <section class="block" id="prd-5">
+          <div class="section-head"><span class="section-num">05</span>
+            <h2>User Journey</h2>
+          </div>
+          <div class="journey">
+            <span class="journey-step">Guest</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Register</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Verify email</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Login</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Browse courses</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Enroll</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Complete lessons</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Submit assignment</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Take quiz</span><span class="journey-arrow">→</span>
+            <span class="journey-step">Receive certificate</span>
+          </div>
+        </section>
+
+        <section class="block" id="prd-6">
+          <div class="section-head"><span class="section-num">06</span>
+            <h2>Functional Requirements</h2>
+          </div>
+          <p>Each module carries its own business rules, user stories, and acceptance criteria. Click to expand.</p>
+
+          <div class="module" id="mod-auth">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.1</span>Authentication &amp; Authorization</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Handles registration, login, email verification, and role‑based access.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Accounts must verify email before enrolling or publishing</li>
+                <li>Roles are fixed at registration; only admin can change</li>
+                <li>Every sensitive action is tied to an authenticated user</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As a new user, I want to register and verify my email, so I can access the platform.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Registration requires unique email and valid password</li>
+                <li>Unverified accounts cannot enroll or submit</li>
+                <li>Role‑protected endpoints reject wrong roles</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-courses">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.2</span>Course Management</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Allows instructors to create and organize learning content.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Only instructors can create courses</li>
+                <li>Published courses are visible; drafts are not</li>
+                <li>Archived courses cannot receive new enrollments</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As an instructor, I want to create a course, so that students can enroll.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Course title and category are required</li>
+                <li>Duplicate course names under the same instructor are rejected</li>
+                <li>Only the owning instructor or admin can edit or archive</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-lessons">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.3</span>Lessons</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Lessons are the ordered content units inside a course.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Lessons belong to one course and have a defined order</li>
+                <li>A lesson cannot be published before its parent course</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As an instructor, I want to add ordered lessons, so students follow a clear path.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Lessons expose a sequence/order field</li>
+                <li>Reordering lessons doesn't break existing progress</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-assignments">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.4</span>Assignments</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Instructor‑defined tasks with deadlines and grading.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Each assignment has a due date and belongs to one course</li>
+                <li>Students may submit once unless resubmission is allowed</li>
+                <li>Grades can only be entered by the owning instructor or admin</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As a student, I want to submit an assignment before the deadline, so it gets graded.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Submissions after the deadline are flagged as late</li>
+                <li>Submissions record student, assignment, and timestamp</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-quizzes">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.5</span>Quizzes</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Timed or untimed assessments with automatic scoring.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Quizzes have an open/close window</li>
+                <li>Each attempt is recorded; max attempts is configurable</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As a student, I want to take a quiz and see my score, so I know how I performed.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Objective questions are scored automatically</li>
+                <li>Expired quiz windows block new attempts</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-progress">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.6</span>Progress Tracking</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Tracks how far a student has moved through a course.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Progress is calculated per enrollment, not globally</li>
+                <li>Completion status reconciles lessons, assignments, quizzes</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As a student, I want to see how much of a course I've completed.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Progress percentage updates automatically</li>
+                <li>Course is marked complete only when all components are done</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-notify">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.7</span>Email Notifications</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Keeps users informed of relevant events.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Notifications are generated on defined triggers (enrollment, grading, deadlines)</li>
+                <li>Each notification belongs to exactly one user</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As a student, I want to be notified when my assignment is graded.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Notifications are queued, not synchronous</li>
+                <li>Unread/read state is tracked</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="module" id="mod-reporting">
+            <div class="module-head" onclick="toggleModule(this)">
+              <h3><span class="mod-index">6.8</span>Reporting</h3>
+              <span class="chevron"></span>
+            </div>
+            <div class="module-body">
+              <p>Aggregated views for instructors and admins.</p>
+              <h5>Business rules</h5>
+              <ul>
+                <li>Instructors report only on their own courses; admins see platform‑wide</li>
+              </ul>
+              <h5>User story</h5>
+              <ul>
+                <li>As an instructor, I want to see completion rates, so I can spot where students get stuck.</li>
+              </ul>
+              <h5>Acceptance criteria</h5>
+              <ul>
+                <li>Reports support filtering by course, date range, status</li>
+                <li>Large reports are paginated</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="block" id="prd-7">
+          <div class="section-head"><span class="section-num">07</span>
+            <h2>Non‑Functional Requirements</h2>
+          </div>
+          <table class="spec">
+            <tr>
+              <th>Category</th>
+              <th>Requirements</th>
+            </tr>
+            <tr>
+              <td>Security</td>
+              <td>Auth, authorization, validation, audit logs</td>
+            </tr>
+            <tr>
+              <td>Performance</td>
+              <td>Pagination, search, filtering, sorting</td>
+            </tr>
+            <tr>
+              <td>Scalability</td>
+              <td>Queued jobs for notifications, caching</td>
+            </tr>
+            <tr>
+              <td>Reliability</td>
+              <td>Structured logging, consistent error handling, backups</td>
+            </tr>
+            <tr>
+              <td>Maintainability</td>
+              <td>SOLID principles, clean architecture, API docs</td>
+            </tr>
+          </table>
+        </section>
+
+        <section class="block" id="prd-8">
+          <div class="section-head"><span class="section-num">08</span>
+            <h2>Edge Cases</h2>
+          </div>
+          <div class="edge-case"><span class="edge-tag">enrollment</span>Student attempts to enroll twice in the same
+            course</div>
+          <div class="edge-case"><span class="edge-tag">courses</span>Instructor deletes a course that has active
+            students</div>
+          <div class="edge-case"><span class="edge-tag">assignments</span>Assignment submitted after the deadline</div>
+          <div class="edge-case"><span class="edge-tag">quizzes</span>Student attempts a quiz after the window closed
+          </div>
+          <div class="edge-case"><span class="edge-tag">lessons</span>Instructor removes a lesson students have already
+            completed</div>
+          <div class="edge-case"><span class="edge-tag">concurrency</span>Two simultaneous enrollment requests for same
+            student and course</div>
+        </section>
+
+        <section class="block" id="prd-9">
+          <div class="section-head"><span class="section-num">09</span>
+            <h2>Deliverables</h2>
+          </div>
+          <div class="constraints-grid">
+            <div class="chip">Source code</div>
+            <div class="chip">API documentation</div>
+            <div class="chip">End To End Web Application</div>
+            <div class="chip">Final presentation</div>
+          </div>
+        </section>
+
+        <section class="block" id="prd-10">
+          <div class="section-head"><span class="section-num">10</span>
+            <h2>Evaluation Criteria</h2>
+          </div>
+          <table class="spec">
+            <tr>
+              <th>Area</th>
+              <th>Criteria</th>
+            </tr>
+            <!-- <tr><td>Architecture</td><td>Clean structure, sensible module boundaries</td></tr> -->
+            <tr>
+              <td>Business logic</td>
+              <td>Rules correctly enforced, edge cases handled</td>
+            </tr>
+            <tr>
+              <td>Security</td>
+              <td>Auth, validation, access control (OWASP top 10)</td>
+            </tr>
+            <tr>
+              <td>API design</td>
+              <td>Consistent, RESTful, well‑documented</td>
+            </tr>
+            <tr>
+              <td>Database</td>
+              <td>Sound schema, correct relationships, indexing</td>
+            </tr>
+            <!-- <tr><td>Testing</td><td>Meaningful coverage of core flows and edge cases (unit & integration tests)</td></tr> -->
+          </table>
+        </section>
+
+        <footer class="pagefoot"><span>LMS / PRD / v1.0</span><span>Product Requirements</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showDoc(which) {
+      document.getElementById('pane-brd').classList.toggle('active', which === 'brd');
+      document.getElementById('pane-prd').classList.toggle('active', which === 'prd');
+      document.getElementById('btn-brd').classList.toggle('active', which === 'brd');
+      document.getElementById('btn-prd').classList.toggle('active', which === 'prd');
+      document.getElementById('toc-brd').style.display = which === 'brd' ? 'block' : 'none';
+      document.getElementById('toc-prd').style.display = which === 'prd' ? 'block' : 'none';
+    }
+
+    function toggleModule(head) {
+      const mod = head.parentElement;
+      mod.classList.toggle('open');
+    }
+
+    // open first module by default
+    document.getElementById('mod-auth').classList.add('open');
+
+    // TOC active-link highlighting
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          document.querySelectorAll('.toc-link').forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    document.querySelectorAll('section.block').forEach(sec => observer.observe(sec));
+  </script>
+</body>
+
+</html>
