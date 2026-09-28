@@ -24,7 +24,7 @@ class AssignmentRequest extends FormRequest
     {
         return [
             'title'=>'required|string',
-            'description'=>'required|text',
+            'description'=>'required|string',
             'due_date'=>'required|date',
             'total_marks'=>'required|integer',
         ];

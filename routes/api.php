@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
@@ -63,11 +64,11 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/enrollment/{enrollment}',[EnrollmentController::class,'show']);
 
     //Assignments
-    Route::get('/courses/{course}/assignments',[Assignment::class,'index']);
-    Route::get('/assignment/{assignment}',[Assignment::class,'show']);
-    Route::post('/courses/{course}/assignments',[Assignment::class,'store']);
-    Route::put('/assignment/{assignment}',[Assignment::class,'update']);
-    Route::delete('/assignment/{assignment}',[Assignment::class,'destroy']);
+    Route::get('/courses/{course}/assignments',[AssignmentController::class,'index']);
+    Route::get('/assignment/{assignment}',[AssignmentController::class,'show']);
+    Route::post('/courses/{course}/assignments',[AssignmentController::class,'store']);
+    Route::put('/assignment/{assignment}',[AssignmentController::class,'update']);
+    Route::delete('/assignment/{assignment}',[AssignmentController::class,'destroy']);
     
 });
 
