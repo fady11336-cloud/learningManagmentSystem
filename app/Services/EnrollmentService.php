@@ -15,7 +15,7 @@ class EnrollmentService
         ->where('course_id',$course->id)->exists();
 
         if($alreadyEnrolled)
-            {
+            { 
                 return response()->json([
                     'success'=>false,
                     'message'=>'already enrolled',

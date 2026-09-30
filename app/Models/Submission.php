@@ -12,6 +12,7 @@ class Submission extends Model
         'assignment_id',
         'user_id',
         'submission_file',
+        'submission_at'
     ];
 
     public function assignment(): BelongsTo
