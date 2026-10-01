@@ -7,8 +7,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\SubmissionController;
 use App\Models\Assignment;
 use GuzzleHttp\Middleware;
+use Illuminate\Database\Eloquent\Attributes\RouteKey;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register',[AuthController::class,'register']);
@@ -69,6 +71,12 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/courses/{course}/assignments',[AssignmentController::class,'store']);
     Route::put('/assignment/{assignment}',[AssignmentController::class,'update']);
     Route::delete('/assignment/{assignment}',[AssignmentController::class,'destroy']);
+
+    //Submissions 
+    Route::get('/assignments/{assignment}/submissions',[SubmissionController::class,'index']);
+    Route::get('/submissions/{submission}',[SubmissionController::class,'show']);
+    Route::post('/assignments/{assignment}/submit',[SubmissionController::class,'store']);
+    Route::patch('/submissions/{submission}/grade',[SubmissionController::class,'update']);
     
 });
 

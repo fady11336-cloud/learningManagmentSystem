@@ -8,6 +8,7 @@ use App\Models\Submission;
 use Illuminate\Support\Facades\Gate;
 use App\Services\SubmissionService;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\SubmissionResource;
 class SubmissionController extends Controller
 {
     /**
@@ -22,7 +23,7 @@ class SubmissionController extends Controller
         return response()->json([
             'success'=>true,
             'message'=>'submissions retrieved successfully',
-            'data'=>$submissions
+            'data'=>SubmissionResource::collection($submissions),
         ]);
     }
 
@@ -39,10 +40,18 @@ class SubmissionController extends Controller
 
         $submission = $submissionService->submit(Auth::user(),$assignment,$data);
 
+        if($submission === null)
+            {
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'already submited',
+                ],409);
+            }
+
         return response()->json([
             'success'=>true,
             'message'=>'submission created successfully',
-            'data'=>$submission
+            'data'=> new SubmissionResource($submission)
         ],201);
     }
 
@@ -58,24 +67,34 @@ class SubmissionController extends Controller
         return response()->json([
             'success'=>true,
             'message'=>'submission retrieved successfully',
-            'data'=>$submission
+            'data'=>new SubmissionResource($submission),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Submission $submission, SubmissionService $submissionService)
     {
+        Gate::authorize('update',$submission);
 
-        //
+        $data = $request->validate([
+            'grade'=>'required|numeric|max:100|min:0',
+        ]);
+
+        $grade = $submissionService->grade($submission,$data);
+
+        return response()->json([
+            'success'=>true,
+            'message'=>'grade added successfully',
+            'data'=>[
+                'id'=>$grade['id'],
+                'grade'=>$grade['grade'],
+                'grade_status'=>$grade['grade_status'],
+                'assignment_id'=>$grade['assignment_id'],
+                'user_id'=>$grade['user_id'],
+            ]
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
