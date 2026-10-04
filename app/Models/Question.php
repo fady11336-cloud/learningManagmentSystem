@@ -11,11 +11,17 @@ class Question extends Model
         'mark',
         'question_type',
         'question_text',
+        'correct_answer',
         'quiz_id',
     ];
 
     public function quiz(): BelongsTo
     {
         return $this -> belongsTo(Quiz::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }
