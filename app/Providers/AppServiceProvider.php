@@ -10,11 +10,13 @@ use App\Policies\UserPolicy;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Models\Quiz;
 use App\Policies\AssignmentPolicy;
 use App\Policies\CoursePolicy;
 use App\Policies\LessonPolicy;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\EnrollmentPolicy;
+use App\Policies\QuizPolicy;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -35,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Lesson::class, LessonPolicy::class);
         Gate::policy(Enrollment::class, EnrollmentPolicy::class);
         Gate::policy(Assignment::class, AssignmentPolicy::class);
+        Gate::policy(Quiz::class, QuizPolicy::class);
 
         ResetPassword::createUrlUsing(function (User $user, string $token)
         {

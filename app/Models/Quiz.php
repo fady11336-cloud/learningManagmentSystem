@@ -12,6 +12,8 @@ class Quiz extends Model
         'title',
         'description',
         'total_marks',
+        'start_at',
+        'end_at',
         'course_id',
     ];
 

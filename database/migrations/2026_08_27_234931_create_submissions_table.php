@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('grade');
+            $table->unsignedInteger('grade')->nullable();
             $table->foreignId('assignment_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('submission_file');
             $table->dateTime('submission_at');
+            $table->enum('grade_status',['graded','not_graded'])->default('not_graded');
             $table->timestamps();
         });
     }

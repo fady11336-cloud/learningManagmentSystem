@@ -8,6 +8,8 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuestionController;
 use App\Models\Assignment;
 use GuzzleHttp\Middleware;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
@@ -77,7 +79,21 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/submissions/{submission}',[SubmissionController::class,'show']);
     Route::post('/assignments/{assignment}/submit',[SubmissionController::class,'store']);
     Route::patch('/submissions/{submission}/grade',[SubmissionController::class,'update']);
-    
+
+    //Quizzes
+    Route::get('/courses/{course}/quizzes',[QuizController::class,'index']);
+    Route::get('/quizzes/{quiz}',[QuizController::class,'show']);
+    Route::post('/courses/{course}/quizzes',[QuizController::class,'store']);
+    Route::put('/quizzes/{quiz}',[QuizController::class,'update']);
+    Route::delete('/quizzes/{quiz}',[QuizController::class,'destroy']);
+
+    //Questions
+    Route::get('/quizzes/{quiz}/questions',[QuestionController::class,'index']);
+    Route::get('/questions/{question}',[QuestionController::class,'show']);
+    Route::post('/quizzes/{quiz}/questions',[QuestionController::class,'store']);
+    Route::put('/questions/{question}',[QuestionController::class,'update']);
+    Route::delete('/questions/{question}',[QuestionController::class,'destroy']);
+
 });
 
 Route::middleware(['auth:api','isAdmin'])->group(function()

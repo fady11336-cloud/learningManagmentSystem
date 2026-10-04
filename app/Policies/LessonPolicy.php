@@ -16,7 +16,7 @@ class LessonPolicy
     {
         if($user->role->name === 'instructor')
             {
-                return true;
+                return $user->id === $course->user_id;
             }
         if($user->role->name === 'student' && $course->visibility === 'published')
             {

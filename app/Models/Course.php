@@ -47,7 +47,7 @@ class Course extends Model
         return $this -> hasMany(Assignment::class);
     }
 
-    public function quizes(): HasMany
+    public function quizzes(): HasMany
     {
         return $this -> hasMany(Quiz::class);
     }
