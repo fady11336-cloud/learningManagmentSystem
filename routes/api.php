@@ -10,6 +10,7 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AttemptController;
 use App\Models\Assignment;
 use GuzzleHttp\Middleware;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
@@ -93,6 +94,12 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/quizzes/{quiz}/questions',[QuestionController::class,'store']);
     Route::put('/questions/{question}',[QuestionController::class,'update']);
     Route::delete('/questions/{question}',[QuestionController::class,'destroy']);
+
+    //Attempts
+    Route::get('/users/me/attempts',[AttemptController::class,'me']);
+    Route::get('/quizzes/{quiz}/attempts',[AttemptController::class,'index']);
+    Route::get('/attempts/{attempt}',[AttemptController::class,'show']);
+    Route::post('/quizzes/{quiz}/attempts',[AttemptController::class,'store']);
 
 });
 

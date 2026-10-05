@@ -56,7 +56,13 @@ class AttemptController extends Controller
 
         $user = Auth::user();
 
-        $attemptService->attempt($user,$quiz,$data);
+        $newAttempt = $attemptService->attempt($user,$quiz,$data);
+
+        return response()->json([
+            'success'=>true,
+            'message'=>'attempt created successfully',
+            'data'=>$newAttempt
+        ]);
     }
 
     /**
