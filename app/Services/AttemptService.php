@@ -21,7 +21,6 @@ class AttemptService
                 'score'=>$score,
                 'status'=>'failed',
                 'started_at'=>now(),
-                'completed_at'=>now(),
             ]);    
 
             foreach($data as $questionId => $answer)
@@ -46,6 +45,7 @@ class AttemptService
             $attempt->update([
                 'score'=>$score,
                 'status'=>$status,
+                'completed_at'=>now(),
             ]);
 
             return $attempt->refresh();

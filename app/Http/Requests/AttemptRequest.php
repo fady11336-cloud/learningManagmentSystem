@@ -23,8 +23,8 @@ class AttemptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'answer' => 'required|array',
-            'answer.*' => 'required|string|in:A,B,C,D',
+            'answers' => 'required|array',
+            'answers.*' => 'required|string|in:A,B,C,D',
         ];
     }
 }
